@@ -11,11 +11,11 @@ public class SimulationEnvironment {
     public static World world;
     public static final int WIDTH = 600;
     public static final int HEIGHT = 600;
-    public static final int PERSON_RADIUS = 6;
+    public static final int PERSON_RADIUS = 4;
 
     static {
         world = new World(new Vec2(0.0f, 0.0f));
-        addGround(100, 10);
+        addGround(100, 1);
         addWall(0,100, 1, 100);
         addWall(99,100, 1, 100);
         addWall(0,100, 100, 1);
@@ -29,7 +29,7 @@ public class SimulationEnvironment {
         fixtureDef.shape = shape;
 
         BodyDef bodyDef = new BodyDef();
-        bodyDef.position = new Vec2(0.0f, -4.0f);
+        bodyDef.position = new Vec2(0.0f, 2.0f);
         world.createBody(bodyDef).createFixture(fixtureDef);
     }
 

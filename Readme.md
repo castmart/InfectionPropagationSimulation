@@ -1,1 +1,3 @@
-Infection Propagation Simulation
+###### **Infection Propagation Simulation**
+
+This project was created based on the following WashingtonPost article. 

@@ -13,7 +13,7 @@ import static com.castmart.simulation.SimulationEnvironment.*;
 
 public class Person {
 
-    private static final int RECOVER_TIME = 6500;
+    private static final int RECOVER_TIME = 4500;
     // UI element for javafx.
     public Node node;
     private float posX;
@@ -60,12 +60,14 @@ public class Person {
 
         Body body = world.createBody(bodyDef);
         body.createFixture(fixtureDef);
-        body.setLinearVelocity(new Vec2((float)Math.random() * 40, (float)Math.random() * 40));
+        body.setLinearVelocity(
+                new Vec2(( Math.random() * 10 > 5 ? 1 : -1) * (float)Math.random() * 10,
+                        ( Math.random() * 10 > 5 ? 1 : -1) * (float)Math.random() * 10 )
+        );
         // Set the ball as user data to the world body.
-        body.m_userData = this;//setUserData(this);
+        body.setUserData(this);
         // Set body as user data of the ui
         circle.setUserData(body);
-
         return circle;
     }
 
@@ -100,5 +102,9 @@ public class Person {
             this.personHealth = Health.RECOVERED;
             ((Circle)node).setFill(this.personHealth.getColor());
         }
+    }
+
+    public void distroyBody() {
+        world.destroyBody((Body)node.getUserData());
     }
 }

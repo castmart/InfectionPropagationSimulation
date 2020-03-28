@@ -9,11 +9,14 @@
       <VBox alignment="CENTER" prefHeight="800.0" prefWidth="600.0">
          <children>
             <Pane fx:id="headPane" prefHeight="186.0" prefWidth="820.0">
-               <children>
-                  <Button layoutX="283.0" layoutY="69.0" mnemonicParsing="false" text="Start" onAction="#onAction"/>
-               </children></Pane>
+            </Pane>
             <Pane fx:id="simulationPane" prefHeight="600.0" prefWidth="600.0" style="-fx-background-color: #AABBCC;" />
-            <Pane fx:id="footPane" prefHeight="77.0" prefWidth="820.0" />
+            <Pane fx:id="footPane" prefHeight="77.0" prefWidth="820.0">
+               <children>
+                  <Button layoutX="283.0" layoutY="40.0" mnemonicParsing="false" text="Start" onAction="#onAction"/>
+                  <Button layoutX="283.0" layoutY="65.0" mnemonicParsing="false" text="Pause" onAction="#onPause"/>
+               </children>
+            </Pane>
          </children></VBox>
    </children>
 </Pane>

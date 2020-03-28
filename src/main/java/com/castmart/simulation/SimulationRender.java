@@ -28,6 +28,10 @@ public class SimulationRender implements EventHandler<ActionEvent>, ContactListe
         SimulationEnvironment.world.setContactListener(this);
     }
 
+    public void setPeople(Person[] people) {
+        this.people = people;
+    }
+
     public void startRender() {
         timeline.playFromStart();
     }
@@ -46,13 +50,15 @@ public class SimulationRender implements EventHandler<ActionEvent>, ContactListe
         long currentTime = System.currentTimeMillis();
         // Update person position.
         for (Person person : people) {
-            Body body = (Body) person.node.getUserData();
-            float xpos = SimulationEnvironment.toPixelPosX(body.getPosition().x);
-            float ypos = SimulationEnvironment.toPixelPosY(body.getPosition().y);
-            person.node.setLayoutX(xpos);
-            person.node.setLayoutY(ypos);
-            // Check if person has recovered
-            person.checkIfRecover(currentTime);
+            if (person != null) {
+                Body body = (Body) person.node.getUserData();
+                float xpos = SimulationEnvironment.toPixelPosX(body.getPosition().x);
+                float ypos = SimulationEnvironment.toPixelPosY(body.getPosition().y);
+                person.node.setLayoutX(xpos);
+                person.node.setLayoutY(ypos);
+                // Check if person has recovered
+                person.checkIfRecover(currentTime);
+            }
         }
     }
 
