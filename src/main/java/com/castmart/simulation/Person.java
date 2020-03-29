@@ -104,7 +104,7 @@ public class Person {
         }
     }
 
-    public void distroyBody() {
+    public void destroyBody() {
         world.destroyBody((Body)node.getUserData());
     }
 }

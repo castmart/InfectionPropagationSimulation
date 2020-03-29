@@ -1,12 +1,13 @@
 package com.castmart.controller;
 
+import com.castmart.chart.Chart;
 import com.castmart.simulation.Health;
 import com.castmart.simulation.Person;
 import com.castmart.simulation.SimulationRender;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
+import javafx.scene.chart.LineChart;
 import javafx.scene.layout.Pane;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -24,22 +25,29 @@ public class MainScreenController implements Initializable {
     @FXML
     private Pane footPane;
 
+    Chart chart;
     SimulationRender render;
     Person[] population;
-    int defaultPopulation = 320;
+    int defaultPopulation = 200;
 
     public MainScreenController() {
     }
 
     public void initialize(URL location, ResourceBundle resources) {
         population = createPopulation(defaultPopulation);
-        render = new SimulationRender(population);
+        configureChart();
+        render = new SimulationRender(population, chart);
     }
 
     private Person[] createPopulation(int population) {
         Person[] people = new Person[population];
         uniformPopulation(people);
         return people;
+    }
+
+    private void configureChart() {
+        chart = new Chart();
+        headPane.getChildren().add(chart.getLineChart());
     }
 
     private void uniformPopulation(Person[] people) {
@@ -74,12 +82,13 @@ public class MainScreenController implements Initializable {
     public void onPause(ActionEvent event) {
         render.stopRender();
         destroyPopulation();
+        chart.clear();
     }
 
     private void destroyPopulation() {
         for (Person person : population) {
             if (person != null) {
-                person.distroyBody();
+                person.destroyBody();
                 simulationPane.getChildren().remove(person.node);
             }
         }

@@ -1,5 +1,6 @@
 package com.castmart.simulation;
 
+import com.castmart.chart.Chart;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
@@ -16,9 +17,12 @@ public class SimulationRender implements EventHandler<ActionEvent>, ContactListe
     Timeline timeline;
     KeyFrame frame;
     Person[] people;
+    Chart chart;
+    long prevTime = System.currentTimeMillis();
 
-    public SimulationRender(Person[] people) {
+    public SimulationRender(Person[] people, Chart chart) {
         this.people = people;
+        this.chart = chart;
         // The following register this action handler to be notified on each frame.
         timeline = new Timeline();
         timeline.setCycleCount(Timeline.INDEFINITE);
@@ -59,6 +63,11 @@ public class SimulationRender implements EventHandler<ActionEvent>, ContactListe
                 // Check if person has recovered
                 person.checkIfRecover(currentTime);
             }
+        }
+        // Run every second
+        if (System.currentTimeMillis() - prevTime >= 1500) {
+            chart.update(people);
+            prevTime = System.currentTimeMillis();
         }
     }
 
