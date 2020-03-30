@@ -14,13 +14,15 @@ import org.jbox2d.dynamics.contacts.Contact;
 
 public class SimulationRender implements EventHandler<ActionEvent>, ContactListener {
 
+    SimulationEnvironment simulationEnvironment;
     Timeline timeline;
     KeyFrame frame;
     Person[] people;
     Chart chart;
     long prevTime = System.currentTimeMillis();
 
-    public SimulationRender(Person[] people, Chart chart) {
+    public SimulationRender(SimulationEnvironment simulationEnvironment, Person[] people, Chart chart) {
+        this.simulationEnvironment = simulationEnvironment;
         this.people = people;
         this.chart = chart;
         // The following register this action handler to be notified on each frame.
@@ -29,7 +31,7 @@ public class SimulationRender implements EventHandler<ActionEvent>, ContactListe
         Duration duration = Duration.seconds(1.0/60.0);
         frame = new KeyFrame(duration, this, null, null);
         timeline.getKeyFrames().add(frame);
-        SimulationEnvironment.world.setContactListener(this);
+        this.simulationEnvironment.setContactListener(this);
     }
 
     public void setPeople(Person[] people) {
@@ -50,7 +52,7 @@ public class SimulationRender implements EventHandler<ActionEvent>, ContactListe
      */
     public void handle(ActionEvent event) {
         //Create time step. Set Iteration count 8 for velocity and 3 for positions
-        SimulationEnvironment.world.step(1.0f/60.f, 6, 3);
+        this.simulationEnvironment.worldStep();
         long currentTime = System.currentTimeMillis();
         // Update person position.
         for (Person person : people) {

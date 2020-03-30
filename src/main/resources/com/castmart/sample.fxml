@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
@@ -8,13 +14,57 @@
    <children>
       <VBox alignment="CENTER" prefHeight="800.0" prefWidth="600.0">
          <children>
-            <Pane fx:id="headPane" prefHeight="186.0" prefWidth="820.0">
-            </Pane>
-            <Pane fx:id="simulationPane" prefHeight="600.0" prefWidth="600.0" style="-fx-background-color: #AABBCC;" />
-            <Pane fx:id="footPane" prefHeight="77.0" prefWidth="820.0">
+            <Pane fx:id="headPane" prefHeight="180.0" prefWidth="600.0">
                <children>
-                  <Button layoutX="283.0" layoutY="40.0" mnemonicParsing="false" text="Start" onAction="#onAction"/>
-                  <Button layoutX="283.0" layoutY="65.0" mnemonicParsing="false" text="Pause" onAction="#onPause"/>
+                  <LineChart fx:id="lineChart" layoutY="-8.0" prefHeight="180.0" prefWidth="600.0">
+                    <xAxis>
+                      <CategoryAxis side="BOTTOM" />
+                    </xAxis>
+                    <yAxis>
+                      <NumberAxis side="LEFT" />
+                    </yAxis>
+                  </LineChart>
+               </children></Pane>
+            <Pane fx:id="simulationPane" prefHeight="500.0" prefWidth="600.0" style="-fx-background-color: #AABBCC;" />
+            <Pane fx:id="footPane" prefHeight="100.0" prefWidth="600.0">
+               <children>
+                  <VBox prefHeight="100.0" prefWidth="600.0">
+                     <children>
+                        <HBox prefHeight="100.0" prefWidth="192.0">
+                           <children>
+                              <Button mnemonicParsing="false" onAction="#onAction" text="Start">
+                                 <HBox.margin>
+                                    <Insets left="20.0" right="20.0" top="10.0" />
+                                 </HBox.margin>
+                              </Button>
+                              <Button mnemonicParsing="false" onAction="#onPause" text="Pause">
+                                 <HBox.margin>
+                                    <Insets left="20.0" right="20.0" top="10.0" />
+                                 </HBox.margin>
+                              </Button>
+                              <Button mnemonicParsing="false" onAction="#onCancel" text="Stop">
+                                 <HBox.margin>
+                                    <Insets left="20.0" right="20.0" top="10.0" />
+                                 </HBox.margin>
+                              </Button>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <CheckBox mnemonicParsing="false" text="People can recover">
+                                 <HBox.margin>
+                                    <Insets left="20.0" right="20.0" top="13.0" />
+                                 </HBox.margin>
+                              </CheckBox>
+                              <CheckBox mnemonicParsing="false" text="All Move">
+                                 <HBox.margin>
+                                    <Insets left="20.0" right="20.0" top="13.0" />
+                                 </HBox.margin>
+                              </CheckBox>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
                </children>
             </Pane>
          </children></VBox>

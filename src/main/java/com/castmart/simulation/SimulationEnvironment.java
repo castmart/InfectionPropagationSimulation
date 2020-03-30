@@ -1,19 +1,22 @@
 package com.castmart.simulation;
 
+import org.jbox2d.callbacks.ContactListener;
+import org.jbox2d.collision.shapes.CircleShape;
 import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.Vec2;
-import org.jbox2d.dynamics.BodyDef;
-import org.jbox2d.dynamics.FixtureDef;
-import org.jbox2d.dynamics.World;
+import org.jbox2d.dynamics.*;
 
 public class SimulationEnvironment {
 
-    public static World world;
+
     public static final int WIDTH = 600;
-    public static final int HEIGHT = 600;
+    public static final int HEIGHT = 500;
     public static final int PERSON_RADIUS = 4;
 
-    static {
+    private World world;
+
+    public SimulationEnvironment() {
+        // Create the simulation scenario.
         world = new World(new Vec2(0.0f, 0.0f));
         addGround(100, 1);
         addWall(0,100, 1, 100);
@@ -21,7 +24,15 @@ public class SimulationEnvironment {
         addWall(0,100, 100, 1);
     }
 
-    public static void addGround(float width, float height) {
+    public void setContactListener(ContactListener contactListener) {
+        world.setContactListener(contactListener);
+    }
+
+    public void worldStep() {
+        world.step(1.0f/60.f, 6, 3);
+    }
+
+    public void addGround(float width, float height) {
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(width, height);
 
@@ -33,7 +44,7 @@ public class SimulationEnvironment {
         world.createBody(bodyDef).createFixture(fixtureDef);
     }
 
-    public static void addWall(float posX, float posY, float width, float height) {
+    public void addWall(float posX, float posY, float width, float height) {
         PolygonShape ps = new PolygonShape();
         ps.setAsBox(width,height);
 
@@ -46,6 +57,38 @@ public class SimulationEnvironment {
         bd.position.set(posX, posY);
 
         world.createBody(bd).createFixture(fd);
+    }
+
+    public Body createCircleShapeOnWorld(BodyType bodyType, float posX, float posY, float radius) {
+        /////////////////////////////
+        // Box2D Body construction //
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = bodyType;
+        bodyDef.position.set(posX, posY);
+        // Create the box2D shape.
+        CircleShape circleShape = new CircleShape();
+        circleShape.m_radius = radius * 0.2f;
+        // Create the fixture
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = circleShape;
+        fixtureDef.density = 0.6f;
+        fixtureDef.friction = 0.3f;
+        fixtureDef.restitution = 1.0f;
+
+        Body body = world.createBody(bodyDef);
+        body.createFixture(fixtureDef);
+        // Set the random velocity.
+        if (!BodyType.STATIC.equals(bodyType)) {
+            body.setLinearVelocity(
+                    new Vec2((Math.random() * 10 > 5 ? 1 : -1) * (float) Math.random() * 14,
+                            (Math.random() * 10 > 5 ? 1 : -1) * (float) Math.random() * 14)
+            );
+        }
+        return body;
+    }
+
+    public void destroyBody(Body body) {
+        world.destroyBody(body);
     }
 
     /**

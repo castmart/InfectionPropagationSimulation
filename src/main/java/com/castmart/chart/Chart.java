@@ -2,22 +2,20 @@ package com.castmart.chart;
 
 import com.castmart.simulation.Health;
 import com.castmart.simulation.Person;
-import javafx.application.Platform;
 import javafx.scene.chart.*;
-
-import java.util.stream.Stream;
 
 public class Chart {
     final CategoryAxis xAxis;
     final NumberAxis yAxis;
-    final AreaChart<String, Number> lineChart;
+//    final AreaChart<String, Number> lineChart;
+    final LineChart<String, Number> lineChart;
     final XYChart.Series<String, Number> healthy;
     final XYChart.Series<String, Number> infected;
     final XYChart.Series<String, Number> recovered;
 
     int dayCount = 0;
 
-    public Chart() {
+    public Chart(LineChart<String, Number> chart) {
         xAxis = new CategoryAxis(); // we are gonna plot against time
         yAxis = new NumberAxis();
         xAxis.setLabel("Days");
@@ -25,10 +23,8 @@ public class Chart {
         yAxis.setLabel("People");
         yAxis.setAnimated(false); // axis animations are removed
 
-        //creating the line chart with two axis created above
-//        lineChart = new LineChart<>(xAxis, yAxis);
-        lineChart = new AreaChart<>(xAxis, yAxis);
-//        lineChart.setTitle("Infection Propagation Numbers");
+        //lineChart = new AreaChart<>(xAxis, yAxis);
+        lineChart = chart;
         lineChart.setAnimated(false); // disable animations
         lineChart.setLayoutX(0);
         lineChart.setLayoutY(0);
@@ -48,12 +44,11 @@ public class Chart {
         lineChart.getData().addAll(healthy, infected, recovered);
     }
 
-    public AreaChart<String, Number> getLineChart() {
+    public /*Area*/LineChart<String, Number> getLineChart() {
         return lineChart;
     }
 
     public void update(Person[] people) {
-
         long healthyCount = 0;
         int infectedCount = 0;
         int recoveredCount = 0;
@@ -68,20 +63,11 @@ public class Chart {
             }
         }
 
-        final int day = dayCount++;
-
         // Update the chart
-//        Platform.runLater(() -> {
-            // get current time
-//            System.out.println("healthy to ["+healthyCount+"]");
-//            System.out.println("infected to ["+infectedCount+"]");
-//            System.out.println("recovered to ["+recoveredCount+"]");
-            recovered.getData().add(new XYChart.Data<>("Day "+dayCount, recoveredCount));
-            healthy.getData().add(new XYChart.Data<>("Day "+dayCount, healthyCount));
-            infected.getData().add(new XYChart.Data<>("Day "+dayCount, infectedCount));
-//            if (recovered.getData().size() > 60)
-//                series.getData().remove(0);
-//        });
+        recovered.getData().add(new XYChart.Data<>("Day "+dayCount, recoveredCount));
+        healthy.getData().add(new XYChart.Data<>("Day "+dayCount, healthyCount));
+        infected.getData().add(new XYChart.Data<>("Day "+dayCount, infectedCount));
+        dayCount++;
     }
 
     public void clear() {
