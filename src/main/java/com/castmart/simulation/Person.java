@@ -16,7 +16,6 @@ public class Person {
     private float posX;
     private float posY;
     private float radius;
-
     // Health
     private Health personHealth;
     private long infectedOn = -1;

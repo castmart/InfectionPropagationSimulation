@@ -2,7 +2,9 @@ package com.castmart.chart;
 
 import com.castmart.simulation.Health;
 import com.castmart.simulation.Person;
+import javafx.scene.Node;
 import javafx.scene.chart.*;
+import javafx.scene.paint.Color;
 
 public class Chart {
     final CategoryAxis xAxis;
@@ -30,22 +32,43 @@ public class Chart {
         lineChart.setLayoutY(0);
         lineChart.setMaxWidth(600);
         lineChart.setMaxHeight(180);
+        lineChart.applyCss();
 
         //defining a series to display data
         healthy = new XYChart.Series<>();
-        healthy.setName("healthy");
+        healthy.setName("Healthy");
+        lineChart.getData().add(healthy);
+//        setLineColor(healthy, Color.BLUE);
+//        healthy.getNode().getStyleClass().add("series-color01");
 
         infected = new XYChart.Series<>();
-        infected.setName("infected");
-        recovered = new XYChart.Series<>();
-        recovered.setName("recovered");
+        infected.setName("Infected");
+        lineChart.getData().add(infected);
+//        setLineColor(healthy, Color.RED);
+//        infected.getNode().getStyleClass().add("series-color02");
 
-        // add series to chart
-        lineChart.getData().addAll(healthy, infected, recovered);
+        recovered = new XYChart.Series<>();
+        recovered.setName("Recovered");
+        lineChart.getData().add(recovered);
+//        setLineColor(healthy, Color.DARKGREEN);
+//        recovered.getNode().getStyleClass().add("series-color03");
     }
 
-    public /*Area*/LineChart<String, Number> getLineChart() {
-        return lineChart;
+    private void setLineColor(XYChart.Series lineChart, Color color) {
+        String rgb = String.format("%d, %d, %d",
+                (int) (color.getRed() * 255),
+                (int) (color.getGreen() * 255),
+                (int) (color.getBlue() * 255));
+        Node line = lineChart.getNode().lookup(".chart-series-line");
+        line.setStyle("-fx-stroke: rgba(" + rgb + ", 1.0);");
+
+//        Color white = Color.WHITE;
+//        String rgbW = String.format("%d, %d, %d",
+//                (int) (white.getRed() * 255),
+//                (int) (white.getGreen() * 255),
+//                (int) (white.getBlue() * 255));
+//        Node symbol = lineChart.getNode().lookup(".chart-line-symbol");
+//        symbol.setStyle("-fx-background-color: rgba(" + rgb + ", 1.0), rgba(" + rgbW + ", 1.0);");
     }
 
     public void update(Person[] people) {
