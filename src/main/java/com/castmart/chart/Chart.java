@@ -3,6 +3,7 @@ package com.castmart.chart;
 import com.castmart.simulation.Health;
 import com.castmart.simulation.Person;
 import javafx.scene.chart.*;
+import javafx.scene.control.Label;
 
 public class Chart {
     final CategoryAxis xAxis;
@@ -13,9 +14,13 @@ public class Chart {
     final XYChart.Series<String, Number> infected;
     final XYChart.Series<String, Number> recovered;
 
+    final Label healthyLabel;
+    final Label infectedLabel;
+    final Label recoveredLabel;
+
     int dayCount = 0;
 
-    public Chart(LineChart<String, Number> chart) {
+    public Chart(LineChart<String, Number> chart, Label healthyLabel, Label infectedLabel, Label recoveredLabel) {
         xAxis = new CategoryAxis(); // we are gonna plot against time
         yAxis = new NumberAxis();
         xAxis.setLabel("Days");
@@ -44,6 +49,10 @@ public class Chart {
         recovered = new XYChart.Series<>();
         recovered.setName("Recovered");
         lineChart.getData().add(recovered);
+
+        this.healthyLabel = healthyLabel;
+        this.infectedLabel = infectedLabel;
+        this.recoveredLabel = recoveredLabel;
     }
 
     public void update(Person[] people) {
@@ -66,6 +75,11 @@ public class Chart {
         healthy.getData().add(new XYChart.Data<>("Day "+dayCount, healthyCount));
         infected.getData().add(new XYChart.Data<>("Day "+dayCount, infectedCount));
         dayCount++;
+
+        // Update Labels
+        healthyLabel.setText(""+healthyCount);
+        infectedLabel.setText(""+infectedCount);
+        recoveredLabel.setText(""+recoveredCount);
     }
 
     public void clear() {

@@ -20,6 +20,9 @@ public class Person {
     private Health personHealth;
     private long infectedOn = -1;
     private long recoveredOn = -1;
+    // Can recover
+    private boolean canRecover = true;
+    private boolean canDie = false;
 
     SimulationEnvironment simulationEnvironment;
 
@@ -75,11 +78,29 @@ public class Person {
         }
     }
 
+    public void setCanRecover(boolean canRecover) {
+        this.canRecover = canRecover;
+    }
+
+    public void setCanDie(boolean canDie) {
+        this.canDie = canDie;
+    }
+
     public void checkIfRecover(Long currentTime) {
-        if ( Health.INFECTED.equals(personHealth) && (currentTime - infectedOn) > RECOVER_TIME) {
-            this.recoveredOn = System.currentTimeMillis();
-            this.personHealth = Health.RECOVERED;
-            ((Circle)node).setFill(this.personHealth.getColor());
+        if (Health.INFECTED.equals(personHealth) && (currentTime - infectedOn) > RECOVER_TIME) {
+            if (canRecover) {
+                boolean isDead = false;
+                if (canDie) {
+                    // 10% probability to die
+                    isDead = (int)(Math.random() * 10) == 1 ? true : false;
+                }
+                this.recoveredOn = System.currentTimeMillis();
+                this.personHealth = Health.RECOVERED;
+                ((Circle) node).setFill(this.personHealth.getColor());
+            } else {
+                this.personHealth = Health.DEAD;
+                ((Circle) node).setFill(this.personHealth.getColor());
+            }
         }
     }
 

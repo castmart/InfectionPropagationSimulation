@@ -3,6 +3,7 @@ package com.castmart.simulation;
 import com.castmart.chart.Chart;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.util.Duration;
@@ -67,8 +68,14 @@ public class SimulationRender implements EventHandler<ActionEvent>, ContactListe
             }
         }
         // Run every second
-        if (System.currentTimeMillis() - prevTime >= 1500) {
-            chart.update(people);
+        if (System.currentTimeMillis() - prevTime >= 1000) {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    chart.update(people);
+                }
+            });
+
             prevTime = System.currentTimeMillis();
         }
     }

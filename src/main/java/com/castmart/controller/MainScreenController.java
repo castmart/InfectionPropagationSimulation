@@ -9,6 +9,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.LineChart;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import org.jbox2d.dynamics.BodyType;
 
@@ -20,16 +22,26 @@ import static com.castmart.simulation.SimulationEnvironment.PERSON_RADIUS;
 public class MainScreenController implements Initializable {
 
     @FXML
-    private Pane headPane;
-
-    @FXML
     private LineChart<String, Number> lineChart;
 
     @FXML
     private Pane simulationPane;
 
     @FXML
-    private Pane footPane;
+    private CheckBox canRecover;
+
+    @FXML
+    private CheckBox canDie;
+
+    @FXML
+    private Label healthyCountLabel;
+
+    @FXML
+    private Label infectedCountLabel;
+
+    @FXML
+    private Label recoveredCountLabel;
+
 
     SimulationEnvironment simulationEnvironment;
     Chart chart;
@@ -54,7 +66,7 @@ public class MainScreenController implements Initializable {
     }
 
     private void configureChart() {
-        chart = new Chart(lineChart);
+        chart = new Chart(lineChart, healthyCountLabel, infectedCountLabel, recoveredCountLabel);
         //headPane.getChildren().add(chart.getLineChart());
     }
 
@@ -81,8 +93,22 @@ public class MainScreenController implements Initializable {
 
     @FXML
     public void onAction(ActionEvent event) {
-        population[population.length / 2].healthEvent(Health.INFECTED);
+        // Set a random person to be infected.
+        population[ (int) (population.length * Math.random()) ].healthEvent(Health.INFECTED);
+
+        // Update population with the simulation parameters.
+        populationCustomizations(canRecover.isSelected(), canDie.isSelected());
+
+        canRecover.setDisable(true);
+        canDie.setDisable(true);
         render.startRender();
+    }
+
+    private void populationCustomizations(boolean canRecover, boolean canDie) {
+        for(Person person : population) {
+            person.setCanRecover(canRecover);
+            person.setCanDie(canDie);
+        }
     }
 
     @FXML
@@ -95,7 +121,14 @@ public class MainScreenController implements Initializable {
         render.stopRender();
         destroyPopulation();
         chart.clear();
+        // Reset controls.
+        healthyCountLabel.setText("200");
+        infectedCountLabel.setText("0");
+        recoveredCountLabel.setText("0");
+        canRecover.setDisable(false);
+        canDie.setDisable(false);
     }
+
     private void destroyPopulation() {
         for (Person person : population) {
             if (person != null) {
